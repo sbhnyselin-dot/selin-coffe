@@ -1,0 +1,143 @@
+{% extends "base.html" %}
+
+{% block title %}
+Checkout — Selin Coffee
+{% endblock %}
+
+{% block content %}
+
+<section class="page-header compact">
+
+    <div class="container">
+
+        <span class="eyebrow">
+            ALMOST THERE
+        </span>
+
+        <h1>
+            Checkout.
+        </h1>
+
+    </div>
+
+</section>
+
+
+<section class="checkout-section">
+
+    <div class="container checkout-grid">
+
+        <div class="checkout-form-wrapper">
+
+            <h2>
+                Your details
+            </h2>
+
+            <p class="muted">
+                Tell us where to send your coffee.
+            </p>
+
+            <form
+                method="post"
+                class="checkout-form"
+            >
+
+                {% csrf_token %}
+
+                {% if form.non_field_errors %}
+
+                    <div class="form-errors">
+                        {{ form.non_field_errors }}
+                    </div>
+
+                {% endif %}
+
+
+                {% for field in form %}
+
+                    <div class="form-group">
+
+                        <label for="{{ field.id_for_label }}">
+                            {{ field.label }}
+                        </label>
+
+                        {{ field }}
+
+                        {% if field.errors %}
+
+                            <div class="field-error">
+                                {{ field.errors }}
+                            </div>
+
+                        {% endif %}
+
+                    </div>
+
+                {% endfor %}
+
+
+                <button
+                    type="submit"
+                    class="btn btn-primary full-width"
+                >
+                    Place order →
+                </button>
+
+            </form>
+
+        </div>
+
+
+        <aside class="checkout-summary">
+
+            <span class="eyebrow">
+                YOUR ORDER
+            </span>
+
+            <h2>
+                {{ cart_items|length }} item{{ cart_items|length|pluralize }}
+            </h2>
+
+            {% for item in cart_items %}
+
+                <div class="checkout-item">
+
+                    <div>
+
+                        <strong>
+                            {{ item.product.name }}
+                        </strong>
+
+                        <span>
+                            × {{ item.quantity }}
+                        </span>
+
+                    </div>
+
+                    <strong>
+                        ${{ item.subtotal }}
+                    </strong>
+
+                </div>
+
+            {% endfor %}
+
+            <div class="summary-total">
+
+                <span>
+                    Total
+                </span>
+
+                <strong>
+                    ${{ total }}
+                </strong>
+
+            </div>
+
+        </aside>
+
+    </div>
+
+</section>
+
+{% endblock %}

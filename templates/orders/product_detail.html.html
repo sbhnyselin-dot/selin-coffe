@@ -1,0 +1,146 @@
+{% extends "base.html" %}
+
+{% block title %}
+{{ product.name }} — Selin Coffee
+{% endblock %}
+
+{% block content %}
+
+<section class="product-detail-section">
+
+    <div class="container product-detail-grid">
+
+        <div class="detail-image">
+
+            {% if product.image %}
+
+                <img
+                    src="{{ product.image.url }}"
+                    alt="{{ product.name }}"
+                >
+
+            {% else %}
+
+                <div class="detail-placeholder">
+                    ☕
+                </div>
+
+            {% endif %}
+
+        </div>
+
+
+        <div class="detail-content">
+
+            <span class="eyebrow">
+                {{ product.category.name }}
+            </span>
+
+            <h1>
+                {{ product.name }}
+            </h1>
+
+            <strong class="detail-price">
+                ${{ product.price }}
+            </strong>
+
+            <p class="detail-description">
+                {{ product.description }}
+            </p>
+
+            <form
+                action="{% url 'orders:add_to_cart' product.id %}"
+                method="post"
+                class="detail-form"
+            >
+
+                {% csrf_token %}
+
+                <button
+                    type="submit"
+                    class="btn btn-primary"
+                >
+                    Add to bag
+                    →
+                </button>
+
+            </form>
+
+            <div class="detail-note">
+
+                <span>☕</span>
+
+                <p>
+                    Prepared fresh when you order.
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<section class="reviews-section">
+
+    <div class="container">
+
+        <div class="section-heading">
+
+            <div>
+
+                <span class="eyebrow">
+                    CUSTOMER NOTES
+                </span>
+
+                <h2>
+                    What people say.
+                </h2>
+
+            </div>
+
+        </div>
+
+        <div class="reviews-grid">
+
+            {% for review in reviews %}
+
+                <article class="review-card">
+
+                    <div class="stars">
+                        {% for i in "12345" %}
+                            {% if forloop.counter <= review.rating %}
+                                ★
+                            {% else %}
+                                ☆
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+
+                    <p>
+                        "{{ review.comment }}"
+                    </p>
+
+                    <strong>
+                        {{ review.name }}
+                    </strong>
+
+                </article>
+
+            {% empty %}
+
+                <p class="muted">
+                    No reviews yet.
+                </p>
+
+            {% endfor %}
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

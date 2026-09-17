@@ -1,0 +1,190 @@
+{% extends "base.html" %}
+
+{% block title %}
+Your Bag — Selin Coffee
+{% endblock %}
+
+{% block content %}
+
+<section class="page-header compact">
+
+    <div class="container">
+
+        <span class="eyebrow">
+            YOUR ORDER
+        </span>
+
+        <h1>
+            Your bag.
+        </h1>
+
+    </div>
+
+</section>
+
+
+<section class="cart-section">
+
+    <div class="container">
+
+        {% if cart_items %}
+
+            <div class="cart-layout">
+
+                <div class="cart-items">
+
+                    {% for item in cart_items %}
+
+                        <article class="cart-item">
+
+                            <div class="cart-item-image">
+
+                                {% if item.product.image %}
+
+                                    <img
+                                        src="{{ item.product.image.url }}"
+                                        alt="{{ item.product.name }}"
+                                    >
+
+                                {% else %}
+
+                                    ☕
+
+                                {% endif %}
+
+                            </div>
+
+                            <div class="cart-item-info">
+
+                                <span>
+                                    {{ item.product.category.name }}
+                                </span>
+
+                                <h3>
+                                    {{ item.product.name }}
+                                </h3>
+
+                                <strong>
+                                    ${{ item.product.price }}
+                                </strong>
+
+                            </div>
+
+                            <form
+                                action="{% url 'cart:update' item.product.id %}"
+                                method="post"
+                                class="quantity-form"
+                            >
+
+                                {% csrf_token %}
+
+                                <input
+                                    type="number"
+                                    name="quantity"
+                                    value="{{ item.quantity }}"
+                                    min="1"
+                                    max="99"
+                                    aria-label="Quantity"
+                                >
+
+                                <button type="submit">
+                                    Update
+                                </button>
+
+                            </form>
+
+                            <strong class="cart-subtotal">
+                                ${{ item.subtotal }}
+                            </strong>
+
+                            <form
+                                action="{% url 'cart:remove' item.product.id %}"
+                                method="post"
+                            >
+
+                                {% csrf_token %}
+
+                                <button
+                                    type="submit"
+                                    class="remove-button"
+                                >
+                                    ×
+                                </button>
+
+                            </form>
+
+                        </article>
+
+                    {% endfor %}
+
+                </div>
+
+
+                <aside class="cart-summary">
+
+                    <span class="eyebrow">
+                        SUMMARY
+                    </span>
+
+                    <h2>
+                        Your order
+                    </h2>
+
+                    <div class="summary-line">
+                        <span>Subtotal</span>
+                        <strong>${{ total }}</strong>
+                    </div>
+
+                    <div class="summary-line">
+                        <span>Service</span>
+                        <span>Included</span>
+                    </div>
+
+                    <div class="summary-total">
+                        <span>Total</span>
+                        <strong>${{ total }}</strong>
+                    </div>
+
+                    <a
+                        href="{% url 'orders:checkout' %}"
+                        class="btn btn-primary full-width"
+                    >
+                        Continue to checkout →
+                    </a>
+
+                </aside>
+
+            </div>
+
+        {% else %}
+
+            <div class="empty-cart">
+
+                <div class="empty-icon">
+                    ☕
+                </div>
+
+                <h2>
+                    Your bag is empty.
+                </h2>
+
+                <p>
+                    Something delicious is waiting for you.
+                </p>
+
+                <a
+                    href="{% url 'orders:menu' %}"
+                    class="btn btn-primary"
+                >
+                    Browse the menu
+                </a>
+
+            </div>
+
+        {% endif %}
+
+    </div>
+
+</section>
+
+{% endblock %}

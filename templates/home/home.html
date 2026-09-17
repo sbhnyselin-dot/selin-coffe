@@ -1,0 +1,289 @@
+{% extends "base.html" %}
+
+{% block title %}
+Selin Coffee — Your Daily Ritual
+{% endblock %}
+
+{% block content %}
+
+<section class="hero">
+
+    <div class="container hero-grid">
+
+        <div class="hero-content">
+
+            <span class="eyebrow">
+                EST. 2026 · SELIN COFFEE
+            </span>
+
+            <h1>
+                Your daily
+                <span>coffee ritual.</span>
+            </h1>
+
+            <p>
+                Carefully roasted beans, silky milk and
+                little moments worth slowing down for.
+            </p>
+
+            <div class="hero-actions">
+
+                <a
+                    href="{% url 'orders:menu' %}"
+                    class="btn btn-primary"
+                >
+                    Explore the menu
+                    <span>→</span>
+                </a>
+
+                <a
+                    href="#featured"
+                    class="text-link"
+                >
+                    Our favorites
+                </a>
+
+            </div>
+
+        </div>
+
+        <div class="hero-visual">
+
+            <div class="coffee-card">
+
+                <div class="coffee-circle">
+                    ☕
+                </div>
+
+                <span class="coffee-label">
+                    Today's ritual
+                </span>
+
+                <strong>
+                    Slow down.
+                </strong>
+
+                <p>
+                    Sip. Smile. Repeat.
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<section class="category-strip">
+
+    <div class="container">
+
+        <span class="section-kicker">
+            WHAT ARE YOU CRAVING?
+        </span>
+
+        <div class="category-list">
+
+            {% for category in categories %}
+
+                <a
+                    href="{% url 'orders:menu' %}?category={{ category.slug }}"
+                    class="category-pill"
+                >
+                    {{ category.name }}
+                </a>
+
+            {% empty %}
+
+                <span class="category-pill">
+                    Coffee
+                </span>
+
+                <span class="category-pill">
+                    Pastry
+                </span>
+
+                <span class="category-pill">
+                    Cold drinks
+                </span>
+
+            {% endfor %}
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<section
+    class="featured-section"
+    id="featured"
+>
+
+    <div class="container">
+
+        <div class="section-heading">
+
+            <div>
+
+                <span class="eyebrow">
+                    FROM OUR BAR
+                </span>
+
+                <h2>
+                    Favorites, made fresh.
+                </h2>
+
+            </div>
+
+            <a
+                href="{% url 'orders:menu' %}"
+                class="text-link"
+            >
+                View full menu →
+            </a>
+
+        </div>
+
+
+        <div class="product-grid">
+
+            {% for product in featured_products %}
+
+                <article class="product-card">
+
+                    <a
+                        href="{{ product.get_absolute_url }}"
+                        class="product-image"
+                    >
+
+                        {% if product.image %}
+
+                            <img
+                                src="{{ product.image.url }}"
+                                alt="{{ product.name }}"
+                            >
+
+                        {% else %}
+
+                            <div class="placeholder-product">
+                                ☕
+                            </div>
+
+                        {% endif %}
+
+                    </a>
+
+                    <div class="product-info">
+
+                        <div>
+
+                            <span class="product-category">
+                                {{ product.category.name }}
+                            </span>
+
+                            <h3>
+                                <a
+                                    href="{{ product.get_absolute_url }}"
+                                >
+                                    {{ product.name }}
+                                </a>
+                            </h3>
+
+                        </div>
+
+                        <strong class="price">
+                            ${{ product.price }}
+                        </strong>
+
+                    </div>
+
+                    <form
+                        action="{% url 'orders:add_to_cart' product.id %}"
+                        method="post"
+                    >
+
+                        {% csrf_token %}
+
+                        <button
+                            type="submit"
+                            class="add-button"
+                        >
+                            Add to bag
+                            <span>+</span>
+                        </button>
+
+                    </form>
+
+                </article>
+
+            {% empty %}
+
+                <div class="empty-state">
+
+                    <h3>
+                        Your menu is waiting.
+                    </h3>
+
+                    <p>
+                        Add products from the admin panel
+                        to see them here.
+                    </p>
+
+                    <a
+                        href="/admin/"
+                        class="btn btn-primary"
+                    >
+                        Open admin
+                    </a>
+
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<section class="story-section">
+
+    <div class="container story-grid">
+
+        <div class="story-card">
+            <span>01</span>
+            <h3>Good beans.</h3>
+            <p>
+                Carefully selected beans roasted to
+                bring out their natural character.
+            </p>
+        </div>
+
+        <div class="story-card featured-story">
+            <span>02</span>
+            <h3>Made with care.</h3>
+            <p>
+                Every cup is prepared fresh, exactly
+                how your coffee break deserves.
+            </p>
+        </div>
+
+        <div class="story-card">
+            <span>03</span>
+            <h3>Your moment.</h3>
+            <p>
+                Stay for a while. Take your time.
+                This little ritual is yours.
+            </p>
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

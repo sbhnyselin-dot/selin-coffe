@@ -1,0 +1,245 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        {% block title %}Selin Coffee{% endblock %}
+    </title>
+
+    <meta
+        name="description"
+        content="Selin Coffee — handcrafted coffee, fresh pastries and cozy moments."
+    >
+
+    <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com"
+    >
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap"
+        rel="stylesheet"
+    >
+
+    <link
+        rel="stylesheet"
+        href="{% static 'css/style.css' %}"
+    >
+</head>
+
+<body>
+
+<header class="site-header">
+
+    <div class="container nav-wrapper">
+
+        <a
+            href="{% url 'home:index' %}"
+            class="brand"
+        >
+            <span class="brand-mark">S</span>
+
+            <span>
+                <strong>Selin</strong>
+                <small>Coffee</small>
+            </span>
+        </a>
+
+        <nav class="main-nav">
+
+            <a href="{% url 'home:index' %}">
+                Home
+            </a>
+
+            <a href="{% url 'orders:menu' %}">
+                Menu
+            </a>
+
+            <a href="{% url 'orders:checkout' %}">
+                Order
+            </a>
+
+        </nav>
+
+        <div class="nav-actions">
+
+            {% if user.is_authenticated %}
+                <span class="welcome-user">
+                    Hi, {{ user.username }}
+                </span>
+
+                <form
+                    action="{% url 'logout' %}"
+                    method="post"
+                    class="inline-form"
+                >
+                    {% csrf_token %}
+
+                    <button
+                        type="submit"
+                        class="nav-login"
+                    >
+                        Logout
+                    </button>
+                </form>
+            {% else %}
+                <a
+                    href="{% url 'login' %}"
+                    class="nav-login"
+                >
+                    Login
+                </a>
+            {% endif %}
+
+            <a
+                href="{% url 'cart:detail' %}"
+                class="cart-button"
+                aria-label="Shopping cart"
+            >
+                <span>Bag</span>
+
+                {% if request.session.cart %}
+                    <b>
+                        {{ request.session.cart.values|length }}
+                    </b>
+                {% else %}
+                    <b>0</b>
+                {% endif %}
+            </a>
+
+        </div>
+
+        <button
+            class="mobile-menu-btn"
+            id="mobileMenuBtn"
+            type="button"
+            aria-label="Open menu"
+        >
+            ☰
+        </button>
+
+    </div>
+
+</header>
+
+
+<main>
+
+    {% if messages %}
+        <div class="container messages-container">
+
+            {% for message in messages %}
+
+                <div class="message {{ message.tags }}">
+                    {{ message }}
+
+                    <button
+                        type="button"
+                        onclick="this.parentElement.remove()"
+                    >
+                        ×
+                    </button>
+                </div>
+
+            {% endfor %}
+
+        </div>
+    {% endif %}
+
+    {% block content %}
+    {% endblock %}
+
+</main>
+
+
+<footer class="site-footer">
+
+    <div class="container footer-grid">
+
+        <div>
+
+            <a
+                href="{% url 'home:index' %}"
+                class="footer-brand"
+            >
+                Selin Coffee
+            </a>
+
+            <p>
+                Crafted coffee. Slow mornings.
+                Beautiful moments.
+            </p>
+
+        </div>
+
+        <div>
+
+            <h4>Explore</h4>
+
+            <a href="{% url 'home:index' %}">
+                Home
+            </a>
+
+            <a href="{% url 'orders:menu' %}">
+                Menu
+            </a>
+
+            <a href="{% url 'cart:detail' %}">
+                Your Bag
+            </a>
+
+        </div>
+
+        <div>
+
+            <h4>Visit us</h4>
+
+            <p>
+                Mon – Sun
+            </p>
+
+            <p>
+                08:00 – 22:00
+            </p>
+
+        </div>
+
+    </div>
+
+    <div class="footer-bottom">
+
+        <div class="container">
+
+            <span>
+                © {% now "Y" %} Selin Coffee
+            </span>
+
+            <span>
+                Made with coffee &amp; care.
+            </span>
+
+        </div>
+
+    </div>
+
+</footer>
+
+
+<script src="{% static 'js/main.js' %}"></script>
+
+</body>
+</html>

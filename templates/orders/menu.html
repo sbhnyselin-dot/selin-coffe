@@ -1,0 +1,158 @@
+{% extends "base.html" %}
+
+{% block title %}
+Menu — Selin Coffee
+{% endblock %}
+
+{% block content %}
+
+<section class="page-header">
+
+    <div class="container">
+
+        <span class="eyebrow">
+            SELIN COFFEE
+        </span>
+
+        <h1>
+            The menu.
+        </h1>
+
+        <p>
+            Find your next favorite cup.
+        </p>
+
+    </div>
+
+</section>
+
+
+<section class="menu-section">
+
+    <div class="container">
+
+        <div class="category-list menu-categories">
+
+            <a
+                href="{% url 'orders:menu' %}"
+                class="category-pill {% if not active_category %}active{% endif %}"
+            >
+                All
+            </a>
+
+            {% for category in categories %}
+
+                <a
+                    href="?category={{ category.slug }}"
+                    class="category-pill {% if active_category == category.slug %}active{% endif %}"
+                >
+                    {{ category.name }}
+                </a>
+
+            {% endfor %}
+
+        </div>
+
+
+        <div class="product-grid">
+
+            {% for product in products %}
+
+                <article class="product-card">
+
+                    <a
+                        href="{{ product.get_absolute_url }}"
+                        class="product-image"
+                    >
+
+                        {% if product.image %}
+
+                            <img
+                                src="{{ product.image.url }}"
+                                alt="{{ product.name }}"
+                            >
+
+                        {% else %}
+
+                            <div class="placeholder-product">
+                                ☕
+                            </div>
+
+                        {% endif %}
+
+                    </a>
+
+                    <div class="product-info">
+
+                        <div>
+
+                            <span class="product-category">
+                                {{ product.category.name }}
+                            </span>
+
+                            <h3>
+                                <a href="{{ product.get_absolute_url }}">
+                                    {{ product.name }}
+                                </a>
+                            </h3>
+
+                        </div>
+
+                        <strong class="price">
+                            ${{ product.price }}
+                        </strong>
+
+                    </div>
+
+                    <p class="product-description">
+                        {{ product.description|truncatewords:15 }}
+                    </p>
+
+                    <form
+                        action="{% url 'orders:add_to_cart' product.id %}"
+                        method="post"
+                    >
+
+                        {% csrf_token %}
+
+                        <input
+                            type="hidden"
+                            name="next"
+                            value="{% url 'orders:menu' %}"
+                        >
+
+                        <button
+                            type="submit"
+                            class="add-button"
+                        >
+                            Add to bag
+                            <span>+</span>
+                        </button>
+
+                    </form>
+
+                </article>
+
+            {% empty %}
+
+                <div class="empty-state">
+
+                    <h3>
+                        No products found.
+                    </h3>
+
+                    <p>
+                        Try another category.
+                    </p>
+
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

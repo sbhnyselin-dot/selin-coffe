@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+
+{% block title %}
+Order Confirmed — Selin Coffee
+{% endblock %}
+
+{% block content %}
+
+<section class="success-section">
+
+    <div class="container">
+
+        <div class="success-card">
+
+            <div class="success-icon">
+                ✓
+            </div>
+
+            <span class="eyebrow">
+                ORDER CONFIRMED
+            </span>
+
+            <h1>
+                Thank you, {{ order.full_name }}.
+            </h1>
+
+            <p>
+                Your order has been received.
+                We'll start preparing it shortly.
+            </p>
+
+            <div class="order-number">
+                Order #{{ order.id }}
+            </div>
+
+            <div class="success-total">
+
+                <span>
+                    Total
+                </span>
+
+                <strong>
+                    ${{ order.total_price }}
+                </strong>
+
+            </div>
+
+            <div class="success-actions">
+
+                <a
+                    href="{% url 'orders:menu' %}"
+                    class="btn btn-primary"
+                >
+                    Order something else
+                </a>
+
+                <a
+                    href="{% url 'home:index' %}"
+                    class="text-link"
+                >
+                    Back home
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}
