@@ -1,4 +1,5 @@
 import os
+import dj_database_url
 from pathlib import Path
 
 # ---------------------------------------------------------
@@ -19,10 +20,7 @@ SECRET_KEY = os.environ.get(
 
 DEBUG = os.environ.get('DEBUG','True') == 'True'
 
-ALLOWED_HOSTS = [
-    'localhost',
-    '127.0.0.1',
-]
+ALLOWED_HOSTS = ["*"]
 
 
 # ---------------------------------------------------------
@@ -100,12 +98,11 @@ WSGI_APPLICATION = 'core.wsgi.application'
 # ---------------------------------------------------------
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+    "default": dj_database_url.config(
+        default=f"sqlite:///{BASE_DIR / 'db.sqlite3'}",
+        conn_max_age=600
+    )
 }
-
 
 # ---------------------------------------------------------
 # PASSWORD VALIDATION
